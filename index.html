@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Template</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    .quiz-shell {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 24px;
+    }
+
+    .quiz-card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      min-height: 420px;
+      position: relative;
+    }
+
+    .quiz-header {
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .quiz-title {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .quiz-subtitle {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.98rem;
+    }
+
+    .progress-wrap {
+      margin-top: 16px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.92rem;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #2563eb;
+      transition: width 0.35s ease;
+    }
+
+    .quiz-body {
+      padding: 24px;
+      position: relative;
+    }
+
+    .screen {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .screen.fade-out {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+    }
+
+    .question-text {
+      margin: 0 0 22px;
+      font-size: 1.25rem;
+      line-height: 1.45;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-btn,
+    .action-btn {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #fff;
+      padding: 14px 16px;
+      font-size: 1rem;
+      line-height: 1.4;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .answer-btn:hover,
+    .action-btn:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .answer-btn:active,
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .answer-btn.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .answer-btn.correct {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    .answer-btn.incorrect {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn.primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+      text-align: center;
+    }
+
+    .action-btn.primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .action-btn.secondary {
+      text-align: center;
+    }
+
+    .result-summary {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .summary-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .summary-box h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .summary-box p {
+      margin: 0;
+      color: #4b5563;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .review-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .review-item.correct {
+      border-left: 6px solid #16a34a;
+    }
+
+    .review-item.incorrect {
+      border-left: 6px solid #dc2626;
+    }
+
+    .review-item h4 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .review-item p {
+      margin: 6px 0;
+      color: #374151;
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .intro-fields {
+      display: grid;
+      gap: 14px;
+      max-width: 420px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .small-note {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 640px) {
+      .quiz-shell {
+        margin: 18px auto;
+        padding: 14px;
+      }
+
+      .quiz-header,
+      .quiz-body {
+        padding: 18px;
+      }
+
+      .question-text {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-shell">
+    <div class="quiz-card">
+      <div class="quiz-header">
+        <h1 class="quiz-title" id="quizTitle">Quiz Title</h1>
+        <p class="quiz-subtitle" id="quizSubtitle">Answer each question. Your results can be downloaded at the end.</p>
+
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-meta">
+            <span id="progressText">Question 0 of 0</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-body">
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*
+      ============================================================
+      QUIZ SETUP
+      ============================================================
+      Replace the sample questions below with your real questions.
+
+      Each question should follow this structure:
+      {
+        question: "Question text here",
+        choices: ["Choice A", "Choice B", "Choice C", "Choice D"],
+        correctIndex: 1
+      }
+
+      correctIndex is zero-based:
+      0 = first answer
+      1 = second answer
+      2 = third answer
+      3 = fourth answer
+    */
+
+    const quizConfig = {
+      title: "Sample Knowledge Check",
+      subtitle: "This is a template. Replace the sample questions with your actual quiz.",
+      passingPercent: 80,
+      requireName: true,
+      downloadFilePrefix: "quiz-results",
+      questions: [
+        {
+          question: "Sample Question 1: Which answer is currently marked as correct?",
+          choices: ["Option A", "Option B", "Option C", "Option D"],
+          correctIndex: 1
+        },
+        {
+          question: "Sample Question 2: This template shows one question at a time.",
+          choices: ["True", "False"],
+          correctIndex: 0
+        },
+        {
+          question: "Sample Question 3: What happens at the end of the quiz?",
+          choices: [
+            "The results disappear",
+            "The score is calculated and the report can be downloaded",
+            "The browser closes",
+            "Nothing happens"
+          ],
+          correctIndex: 1
+        }
+      ]
+    };
+
+    const state = {
+      currentIndex: 0,
+      answers: [],
+      startedAt: null,
+      finishedAt: null,
+      participantName: ""
+    };
+
+    const quizTitle = document.getElementById('quizTitle');
+    const quizSubtitle = document.getElementById('quizSubtitle');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressFill = document.getElementById('progressFill');
+    const screen = document.getElementById('screen');
+
+    quizTitle.textContent = quizConfig.title;
+    quizSubtitle.textContent = quizConfig.subtitle;
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatDateTime(date) {
+      return new Date(date).toLocaleString();
+    }
+
+    function updateProgress() {
+      const total = quizConfig.questions.length;
+      const current = Math.min(state.currentIndex + 1, total);
+      const percent = total === 0 ? 0 : Math.round((state.currentIndex / total) * 100);
+
+      progressText.textContent = total > 0
+        ? `Question ${Math.min(current, total)} of ${total}`
+        : 'Question 0 of 0';
+
+      progressPercent.textContent = `${percent}%`;
+      progressFill.style.width = `${percent}%`;
+    }
+
+    function fadeTo(renderFn) {
+      screen.classList.add('fade-out');
+      setTimeout(() => {
+        renderFn();
+        screen.classList.remove('fade-out');
+      }, 350);
+    }
+
+    function renderIntro() {
+      progressWrap.classList.add('hidden');
+
+      screen.innerHTML = `
+        <h2 class="question-text">Ready to begin?</h2>
+        <div class="intro-fields">
+          ${quizConfig.requireName ? `
+            <div>
+              <label class="field-label" for="participantName">Name</label>
+              <input class="text-input" id="participantName" type="text" placeholder="Enter your name" />
+            </div>
+          ` : ''}
+        </div>
+        <p class="small-note">
+          This quiz will show one question at a time and will calculate the score automatically at the end.
+        </p>
+        <div class="footer-actions">
+          <button class="action-btn primary" id="startQuizBtn">Start Quiz</button>
+        </div>
+      `;
+
+      const startQuizBtn = document.getElementById('startQuizBtn');
+      startQuizBtn.addEventListener('click', () => {
+        const nameInput = document.getElementById('participantName');
+        const enteredName = nameInput ? nameInput.value.trim() : '';
+
+        if (quizConfig.requireName && !enteredName) {
+          alert('Please enter your name before starting.');
+          return;
+        }
+
+        state.participantName = enteredName;
+        state.startedAt = new Date().toISOString();
+        progressWrap.classList.remove('hidden');
+        state.currentIndex = 0;
+        state.answers = [];
+        updateProgress();
+        fadeTo(renderQuestion);
+      });
+    }
+
+    function renderQuestion() {
+      const total = quizConfig.questions.length;
+      const q = quizConfig.questions[state.currentIndex];
+
+      updateProgress();
+
+      screen.innerHTML = `
+        <h2 class="question-text">${escapeHtml(q.question)}</h2>
+        <div class="answers">
+          ${q.choices.map((choice, index) => `
+            <button class="answer-btn" data-index="${index}">${escapeHtml(choice)}</button>
+          `).join('')}
+        </div>
+      `;
+
+      const answerButtons = screen.querySelectorAll('.answer-btn');
+      answerButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const selectedIndex = Number(button.dataset.index);
+          state.answers[state.currentIndex] = selectedIndex;
+          button.classList.add('selected');
+
+          setTimeout(() => {
+            const isLast = state.currentIndex === total - 1;
+            if (isLast) {
+              state.finishedAt = new Date().toISOString();
+              fadeTo(renderResults);
+            } else {
+              state.currentIndex += 1;
+              fadeTo(renderQuestion);
+            }
+          }, 220);
+        }, { once: true });
+      });
+    }
+
+    function buildResultsData() {
+      let correctCount = 0;
+
+      const detailedResults = quizConfig.questions.map((q, index) => {
+        const selectedIndex = state.answers[index];
+        const selectedText = typeof selectedIndex === 'number' ? q.choices[selectedIndex] : 'No answer selected';
+        const correctText = q.choices[q.correctIndex];
+        const isCorrect = selectedIndex === q.correctIndex;
+
+        if (isCorrect) correctCount += 1;
+
+        return {
+          questionNumber: index + 1,
+          question: q.question,
+          selectedAnswer: selectedText,
+          correctAnswer: correctText,
+          isCorrect
+        };
+      });
+
+      const total = quizConfig.questions.length;
+      const percent = total === 0 ? 0 : Math.round((correctCount / total) * 100);
+      const passed = percent >= quizConfig.passingPercent;
+
+      return {
+        participantName: state.participantName || 'Not provided',
+        startedAt: state.startedAt,
+        finishedAt: state.finishedAt,
+        totalQuestions: total,
+        correctCount,
+        incorrectCount: total - correctCount,
+        percent,
+        passingPercent: quizConfig.passingPercent,
+        passed,
+        detailedResults
+      };
+    }
+
+    function renderResults() {
+      progressText.textContent = `Completed: ${quizConfig.questions.length} of ${quizConfig.questions.length}`;
+      progressPercent.textContent = '100%';
+      progressFill.style.width = '100%';
+
+      const results = buildResultsData();
+
+      screen.innerHTML = `
+        <h2 class="question-text">Quiz Complete</h2>
+
+        <div class="result-summary">
+          <div class="summary-box">
+            <h3>Participant</h3>
+            <p>${escapeHtml(results.participantName)}</p>
+          </div>
+          <div class="summary-box">
+            <h3>Score</h3>
+            <p>${results.correctCount} out of ${results.totalQuestions} (${results.percent}%)</p>
+          </div>
+          <div class="summary-box">
+            <h3>Result</h3>
+            <p>${results.passed ? 'Passed' : 'Did not pass'} (passing score: ${results.passingPercent}%)</p>
+          </div>
+          <div class="summary-box">
+            <h3>Completed</h3>
+            <p>${escapeHtml(formatDateTime(results.finishedAt))}</p>
+          </div>
+        </div>
+
+        <h3>Answer Review</h3>
+        <div class="review-list">
+          ${results.detailedResults.map(item => `
+            <div class="review-item ${item.isCorrect ? 'correct' : 'incorrect'}">
+              <h4>Question ${item.questionNumber}: ${escapeHtml(item.question)}</h4>
+              <p><strong>Your Answer:</strong> ${escapeHtml(item.selectedAnswer)}</p>
+              <p><strong>Correct Answer:</strong> ${escapeHtml(item.correctAnswer)}</p>
+              <p class="muted"><strong>Status:</strong> ${item.isCorrect ? 'Correct' : 'Incorrect'}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="footer-actions">
+          <button class="action-btn primary" id="downloadTxtBtn">Download Results (.txt)</button>
+          <button class="action-btn secondary" id="downloadCsvBtn">Download Results (.csv)</button>
+          <button class="action-btn secondary" id="retakeQuizBtn">Retake Quiz</button>
+        </div>
+      `;
+
+      document.getElementById('downloadTxtBtn').addEventListener('click', () => downloadTxt(results));
+      document.getElementById('downloadCsvBtn').addEventListener('click', () => downloadCsv(results));
+      document.getElementById('retakeQuizBtn').addEventListener('click', resetQuiz);
+    }
+
+    function makeSafeFilenamePart(value) {
+      return String(value)
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
+        .toLowerCase() || 'user';
+    }
+
+    function triggerDownload(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadTxt(results) {
+      const lines = [];
+      lines.push(`${quizConfig.title}`);
+      lines.push('');
+      lines.push(`Participant: ${results.participantName}`);
+      lines.push(`Started: ${formatDateTime(results.startedAt)}`);
+      lines.push(`Finished: ${formatDateTime(results.finishedAt)}`);
+      lines.push(`Score: ${results.correctCount}/${results.totalQuestions} (${results.percent}%)`);
+      lines.push(`Passing Score: ${results.passingPercent}%`);
+      lines.push(`Result: ${results.passed ? 'Passed' : 'Did not pass'}`);
+      lines.push('');
+      lines.push('Question Review');
+      lines.push('----------------------------------------');
+
+      results.detailedResults.forEach((item) => {
+        lines.push(`Question ${item.questionNumber}: ${item.question}`);
+        lines.push(`Your Answer: ${item.selectedAnswer}`);
+        lines.push(`Correct Answer: ${item.correctAnswer}`);
+        lines.push(`Status: ${item.isCorrect ? 'Correct' : 'Incorrect'}`);
+        lines.push('');
+      });
+
+      const filename = `${quizConfig.downloadFilePrefix}-${makeSafeFilenamePart(results.participantName)}.txt`;
+      triggerDownload(filename, lines.join('\n'), 'text/plain;charset=utf-8');
+    }
+
+    function csvEscape(value) {
+      const stringValue = String(value ?? '');
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+
+    function downloadCsv(results) {
+      const rows = [];
+      rows.push([
+        'Participant',
+        'Started',
+        'Finished',
+        'Score Correct',
+        'Total Questions',
+        'Percent',
+        'Passing Percent',
+        'Passed',
+        'Question Number',
+        'Question',
+        'Selected Answer',
+        'Correct Answer',
+        'Status'
+      ]);
+
+      results.detailedResults.forEach((item) => {
+        rows.push([
+          results.participantName,
+          formatDateTime(results.startedAt),
+          formatDateTime(results.finishedAt),
+          results.correctCount,
+          results.totalQuestions,
+          `${results.percent}%`,
+          `${results.passingPercent}%`,
+          results.passed ? 'Yes' : 'No',
+          item.questionNumber,
+          item.question,
+          item.selectedAnswer,
+          item.correctAnswer,
+          item.isCorrect ? 'Correct' : 'Incorrect'
+        ]);
+      });
+
+      const csvContent = rows.map(row => row.map(csvEscape).join(',')).join('\n');
+      const filename = `${quizConfig.downloadFilePrefix}-${makeSafeFilenamePart(results.participantName)}.csv`;
+      triggerDownload(filename, csvContent, 'text/csv;charset=utf-8');
+    }
+
+    function resetQuiz() {
+      state.currentIndex = 0;
+      state.answers = [];
+      state.startedAt = null;
+      state.finishedAt = null;
+      state.participantName = '';
+      progressFill.style.width = '0%';
+      progressPercent.textContent = '0%';
+      renderIntro();
+    }
+
+    renderIntro();
+  </script>
+</body>
+</html>
