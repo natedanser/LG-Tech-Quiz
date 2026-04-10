@@ -150,11 +150,17 @@
     .answer-btn.correct {
       border-color: #16a34a;
       background: #f0fdf4;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.10);
     }
 
     .answer-btn.incorrect {
       border-color: #dc2626;
       background: #fef2f2;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+    }
+
+    .answer-btn.review-mode {
+      cursor: default;
     }
 
     .footer-actions {
@@ -274,6 +280,16 @@
       margin-top: 10px;
       font-size: 0.92rem;
       color: #6b7280;
+    }
+
+    .review-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      color: #374151;
+      line-height: 1.5;
     }
 
     @media (max-width: 640px) {
@@ -882,7 +898,8 @@
       answers: [],
       startedAt: null,
       finishedAt: null,
-      participantName: ""
+      participantName: "",
+      incorrectReviewIndex: 0
     };
 
     const quizTitle = document.getElementById('quizTitle');
@@ -966,6 +983,7 @@
         progressWrap.classList.remove('hidden');
         state.currentIndex = 0;
         state.answers = [];
+        state.incorrectReviewIndex = 0;
         updateProgress();
         fadeTo(renderQuestion);
       });
@@ -1023,7 +1041,10 @@
           questionNumber: index + 1,
           section: q.section || '',
           question: q.question,
+          choices: q.choices,
+          selectedIndex,
           selectedAnswer: selectedText,
+          correctIndex: q.correctIndex,
           correctAnswer: correctText,
           isCorrect
         };
@@ -1031,7 +1052,9 @@
 
       const total = quizConfig.questions.length;
       const percent = total === 0 ? 0 : Math.round((correctCount / total) * 100);
+      const incorrectCount = total - correctCount;
       const passed = percent >= quizConfig.passingPercent;
+      const incorrectItems = detailedResults.filter(item => !item.isCorrect);
 
       return {
         participantName: state.participantName || 'Not provided',
@@ -1039,11 +1062,12 @@
         finishedAt: state.finishedAt,
         totalQuestions: total,
         correctCount,
-        incorrectCount: total - correctCount,
+        incorrectCount,
         percent,
         passingPercent: quizConfig.passingPercent,
         passed,
-        detailedResults
+        detailedResults,
+        incorrectItems
       };
     }
 
@@ -1067,6 +1091,14 @@
             <p>${results.correctCount} out of ${results.totalQuestions} (${results.percent}%)</p>
           </div>
           <div class="summary-box">
+            <h3>Right Answers</h3>
+            <p>${results.correctCount}</p>
+          </div>
+          <div class="summary-box">
+            <h3>Wrong Answers</h3>
+            <p>${results.incorrectCount}</p>
+          </div>
+          <div class="summary-box">
             <h3>Result</h3>
             <p>${results.passed ? 'Passed' : 'Did not pass'} (passing score: ${results.passingPercent}%)</p>
           </div>
@@ -1076,28 +1108,76 @@
           </div>
         </div>
 
-        <h3>Answer Review</h3>
-        <div class="review-list">
-          ${results.detailedResults.map(item => `
-            <div class="review-item ${item.isCorrect ? 'correct' : 'incorrect'}">
-              <h4>${item.section ? `${escapeHtml(item.section)} — ` : ''}Question ${item.questionNumber}: ${escapeHtml(item.question)}</h4>
-              <p><strong>Your Answer:</strong> ${escapeHtml(item.selectedAnswer)}</p>
-              <p><strong>Correct Answer:</strong> ${escapeHtml(item.correctAnswer)}</p>
-              <p class="muted"><strong>Status:</strong> ${item.isCorrect ? 'Correct' : 'Incorrect'}</p>
-            </div>
-          `).join('')}
-        </div>
-
         <div class="footer-actions">
-          <button class="action-btn primary" id="downloadTxtBtn">Download Results (.txt)</button>
+          ${results.incorrectCount > 0 ? `<button class="action-btn primary" id="reviewIncorrectBtn">Review My Incorrect Answers</button>` : ''}
+          <button class="action-btn secondary" id="downloadTxtBtn">Download Results (.txt)</button>
           <button class="action-btn secondary" id="downloadCsvBtn">Download Results (.csv)</button>
           <button class="action-btn secondary" id="retakeQuizBtn">Retake Quiz</button>
         </div>
       `;
 
+      if (results.incorrectCount > 0) {
+        document.getElementById('reviewIncorrectBtn').addEventListener('click', () => {
+          state.incorrectReviewIndex = 0;
+          fadeTo(renderIncorrectReview);
+        });
+      }
+
       document.getElementById('downloadTxtBtn').addEventListener('click', () => downloadTxt(results));
       document.getElementById('downloadCsvBtn').addEventListener('click', () => downloadCsv(results));
       document.getElementById('retakeQuizBtn').addEventListener('click', resetQuiz);
+    }
+
+    function renderIncorrectReview() {
+      const results = buildResultsData();
+      const incorrectItems = results.incorrectItems;
+
+      if (incorrectItems.length === 0) {
+        fadeTo(renderResults);
+        return;
+      }
+
+      const item = incorrectItems[state.incorrectReviewIndex];
+      const reviewPosition = state.incorrectReviewIndex + 1;
+      const isLastReview = reviewPosition === incorrectItems.length;
+
+      screen.innerHTML = `
+        ${item.section ? `<div class="section-label">${escapeHtml(item.section)}</div>` : ''}
+        <h2 class="question-text">Reviewing Incorrect Answer ${reviewPosition} of ${incorrectItems.length}</h2>
+        <div class="review-note">
+          <strong>Question ${item.questionNumber}:</strong> ${escapeHtml(item.question)}
+        </div>
+
+        <div class="answers" style="margin-top: 18px;">
+          ${item.choices.map((choice, index) => {
+            let className = 'answer-btn review-mode';
+            if (index === item.correctIndex) {
+              className += ' correct';
+            } else if (index === item.selectedIndex) {
+              className += ' incorrect';
+            }
+            return `<button class="${className}" disabled>${escapeHtml(choice)}</button>`;
+          }).join('')}
+        </div>
+
+        <div class="review-note">
+          <div><strong>Your Answer:</strong> ${escapeHtml(item.selectedAnswer)}</div>
+          <div><strong>Correct Answer:</strong> ${escapeHtml(item.correctAnswer)}</div>
+        </div>
+
+        <div class="footer-actions">
+          <button class="action-btn primary" id="nextReviewBtn">${isLastReview ? 'Back to Results' : 'Next Incorrect Answer'}</button>
+        </div>
+      `;
+
+      document.getElementById('nextReviewBtn').addEventListener('click', () => {
+        if (isLastReview) {
+          fadeTo(renderResults);
+        } else {
+          state.incorrectReviewIndex += 1;
+          fadeTo(renderIncorrectReview);
+        }
+      });
     }
 
     function makeSafeFilenamePart(value) {
@@ -1128,6 +1208,8 @@
       lines.push(`Started: ${formatDateTime(results.startedAt)}`);
       lines.push(`Finished: ${formatDateTime(results.finishedAt)}`);
       lines.push(`Score: ${results.correctCount}/${results.totalQuestions} (${results.percent}%)`);
+      lines.push(`Right Answers: ${results.correctCount}`);
+      lines.push(`Wrong Answers: ${results.incorrectCount}`);
       lines.push(`Passing Score: ${results.passingPercent}%`);
       lines.push(`Result: ${results.passed ? 'Passed' : 'Did not pass'}`);
       lines.push('');
@@ -1159,6 +1241,7 @@
         'Started',
         'Finished',
         'Score Correct',
+        'Score Incorrect',
         'Total Questions',
         'Percent',
         'Passing Percent',
@@ -1177,6 +1260,7 @@
           formatDateTime(results.startedAt),
           formatDateTime(results.finishedAt),
           results.correctCount,
+          results.incorrectCount,
           results.totalQuestions,
           `${results.percent}%`,
           `${results.passingPercent}%`,
@@ -1201,6 +1285,7 @@
       state.startedAt = null;
       state.finishedAt = null;
       state.participantName = '';
+      state.incorrectReviewIndex = 0;
       progressFill.style.width = '0%';
       progressPercent.textContent = '0%';
       renderIntro();
