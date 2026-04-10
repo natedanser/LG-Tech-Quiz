@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Template</title>
+  <title>LightGig Quiz</title>
   <style>
     * {
       box-sizing: border-box;
@@ -91,6 +91,18 @@
       opacity: 0;
       transform: translateY(12px);
       pointer-events: none;
+    }
+
+    .section-label {
+      display: inline-block;
+      margin: 0 0 12px;
+      padding: 6px 10px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
 
     .question-text {
@@ -306,52 +318,546 @@
   </div>
 
   <script>
-    /*
-      ============================================================
-      QUIZ SETUP
-      ============================================================
-      Replace the sample questions below with your real questions.
-
-      Each question should follow this structure:
-      {
-        question: "Question text here",
-        choices: ["Choice A", "Choice B", "Choice C", "Choice D"],
-        correctIndex: 1
-      }
-
-      correctIndex is zero-based:
-      0 = first answer
-      1 = second answer
-      2 = third answer
-      3 = fourth answer
-    */
-
     const quizConfig = {
-      title: "Sample Knowledge Check",
-      subtitle: "This is a template. Replace the sample questions with your actual quiz.",
+      title: "LightGig Training Quiz",
+      subtitle: "Answer each question. Your results can be downloaded at the end.",
       passingPercent: 80,
       requireName: true,
-      downloadFilePrefix: "quiz-results",
+      downloadFilePrefix: "lightgig-training-quiz-results",
       questions: [
         {
-          question: "Sample Question 1: Which answer is currently marked as correct?",
-          choices: ["Option A", "Option B", "Option C", "Option D"],
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "Which termination standard does LightGig use when terminating Ethernet cables for installations?",
+          choices: ["T568A", "T568B", "Crossover", "Proprietary"],
           correctIndex: 1
         },
         {
-          question: "Sample Question 2: This template shows one question at a time.",
-          choices: ["True", "False"],
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "Which of the following correctly represents the T568B color order used for Ethernet terminations?",
+          choices: [
+            "White/Green, Green, White/Orange, Blue, White/Blue, Orange, White/Brown, Brown",
+            "White/Orange, Orange, White/Green, Blue, White/Blue, Green, White/Brown, Brown",
+            "Orange, White/Orange, Green, White/Green, Blue, White/Blue, Brown, White/Brown",
+            "White/Brown, Brown, White/Blue, Blue, White/Green, Green, White/Orange, Orange"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "When terminating an Ethernet cable, what is required to ensure the cable can deliver full rated speeds?",
+          choices: [
+            "Only the transmit pairs need to be properly terminated",
+            "At least half of the pins must be connected correctly",
+            "All 8 conductors must be properly terminated on both ends of the cable",
+            "Only one end of the cable needs to be correctly terminated"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "If an Ethernet cable is improperly terminated and not all pins are making solid contact, what is the most likely result?",
+          choices: [
+            "The connection will fail completely and no internet will pass",
+            "The router will automatically compensate and maintain full speeds",
+            "The connection may work but experience slower speeds or intermittent drops",
+            "The ONT will shut down due to signal inconsistency"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "What is the primary purpose of performing a \"wiggle test\" on a keystone or termination point?",
+          choices: [
+            "To verify Wi-Fi signal strength near the wall plate",
+            "To test whether the ONT is receiving proper optical signal",
+            "To check the reliability and stability of the physical cable termination",
+            "To measure network latency across the connection"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "In networking, what is meant by \"speed negotiation\" between two devices?",
+          choices: [
+            "A manual configuration where a technician selects a fixed speed",
+            "A process where devices agree on the highest stable speed they can both support",
+            "A router function that boosts speed during high usage",
+            "A fiber-specific process that determines wavelength usage"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "If there is a problem with a cable, port, or termination, how will speed negotiation typically respond?",
+          choices: [
+            "It will force the connection to remain at maximum speed",
+            "It will disconnect the devices entirely",
+            "It will negotiate down to a lower speed that can be maintained reliably",
+            "It will switch the connection to wireless automatically"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "In a residential installation, what is typically referred to as the \"home run\"?",
+          choices: [
+            "The wireless signal broadcast from the router",
+            "The fiber line running from the street to the home",
+            "The cable running from the demarcation point to an interior location in the home",
+            "The connection between two mesh nodes"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Ethernet, Cabling & Layer 1 Fundamentals",
+          question: "What is meant by a \"horizontal run\" in a home network installation?",
+          choices: [
+            "The fiber line entering the home from the street",
+            "The internal Ethernet cabling that runs within the home to connect devices or wall ports",
+            "The connection between the ONT and the OLT",
+            "The wireless signal path between devices"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What is one of the primary advantages of fiber optic internet compared to traditional copper-based connections?",
+          choices: [
+            "It relies on electrical signals, making it easier to install",
+            "It is highly resistant to electrical interference",
+            "It has lower maximum speeds than copper",
+            "It requires more maintenance due to interference"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What unique capability does fiber optic technology provide in terms of data transmission?",
+          choices: [
+            "It can only carry a single stream of data at a time",
+            "It can transmit multiple data streams simultaneously over the same fiber",
+            "It converts all signals into analog format",
+            "It limits bandwidth to prevent congestion"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What technology allows multiple signals to travel along a single fiber strand without interfering with each other?",
+          choices: [
+            "Network Address Translation (NAT)",
+            "Dynamic Host Configuration Protocol (DHCP)",
+            "Wavelength Division Multiplexing (WDM)",
+            "Domain Name System (DNS)"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "In the context of fiber internet, what does the acronym ONT stand for?",
+          choices: [
+            "Optical Network Transceiver",
+            "Optical Node Terminal",
+            "Optical Network Terminal",
+            "Online Network Tool"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What is the primary function of an ONT within a fiber network?",
+          choices: [
+            "To amplify Wi-Fi signals throughout the home",
+            "To convert light signals from fiber into usable Ethernet signals",
+            "To store network traffic for later transmission",
+            "To manage billing and customer data"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What does the acronym OLT stand for in a fiber network?",
+          choices: [
+            "Optical Link Terminal",
+            "Optical Line Terminal",
+            "Online Line Tool",
+            "Optical Light Transmitter"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Fundamentals (ONT / OLT / Core Concepts)",
+          question: "What is the role of the OLT in relation to customer installations?",
+          choices: [
+            "It is installed inside the customer’s home to manage Wi-Fi",
+            "It sends fiber signals out to multiple ONTs in the network",
+            "It converts Ethernet signals into wireless signals",
+            "It controls router settings for individual customers"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Equipment & Hardware Knowledge",
+          question: "What is the maximum bandwidth capability of a Nano ONT?",
+          choices: ["100 Mbps", "1 Gbps", "2.5 Gbps", "10 Gbps"],
+          correctIndex: 1
+        },
+        {
+          section: "Equipment & Hardware Knowledge",
+          question: "What is the maximum bandwidth capability of a Fiber XG ONT?",
+          choices: ["1 Gbps", "2.5 Gbps", "5 Gbps", "10 Gbps"],
+          correctIndex: 2
+        },
+        {
+          section: "Equipment & Hardware Knowledge",
+          question: "What is the maximum bandwidth capability of an XGS ONT?",
+          choices: ["1 Gbps", "2.5 Gbps", "5 Gbps", "10 Gbps"],
+          correctIndex: 3
+        },
+        {
+          section: "Equipment & Hardware Knowledge",
+          question: "What is the primary purpose of a power injector in a typical installation?",
+          choices: [
+            "To increase Wi-Fi signal strength throughout the home",
+            "To provide electrical power to the ONT over an Ethernet cable",
+            "To convert fiber signals into wireless signals",
+            "To regulate bandwidth usage across devices"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Equipment & Hardware Knowledge",
+          question: "Why is a power injector necessary in certain installations?",
+          choices: [
+            "Because the router cannot supply power directly to the ONT",
+            "Because fiber signals require additional amplification",
+            "Because it increases download and upload speeds",
+            "Because it replaces the need for a router"
+          ],
           correctIndex: 0
         },
         {
-          question: "Sample Question 3: What happens at the end of the quiz?",
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "What does LightGig mean by its \"scope of service\" during an installation?",
           choices: [
-            "The results disappear",
-            "The score is calculated and the report can be downloaded",
-            "The browser closes",
-            "Nothing happens"
+            "Providing full in-home networking and device setup",
+            "Delivering internet service reliably to a single point in the home",
+            "Managing all customer-owned networking equipment",
+            "Installing mesh systems in every room"
           ],
           correctIndex: 1
+        },
+        {
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "Which of the following is NOT part of the typical LightGig customer experience?",
+          choices: [
+            "Local customer support",
+            "Transparent pricing",
+            "Automated phone tree navigation",
+            "On-time scheduled appointments"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "What is meant by \"no oversubscription\" in a network context?",
+          choices: [
+            "Selling more bandwidth than the network can handle",
+            "Limiting the number of customers below demand",
+            "Maintaining enough capacity so customers consistently receive expected speeds",
+            "Preventing customers from using high bandwidth"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "What is the northern boundary of LightGig’s service area?",
+          choices: ["Fort Collins", "Wellington", "Greeley", "Windsor"],
+          correctIndex: 1
+        },
+        {
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "What is the southern boundary of LightGig’s service area?",
+          choices: ["Loveland", "Evans", "Mead", "Timnath"],
+          correctIndex: 2
+        },
+        {
+          section: "Service Model: Scope, Service Area & LightGig Differentiators",
+          question: "Which of the following best describes the east and west boundaries of LightGig’s service area?",
+          choices: ["Highway 34 and Highway 85", "I-70 and I-76", "I-25 and US-85", "I-80 and I-25"],
+          correctIndex: 2
+        },
+        {
+          section: "Routers & ISP Equipment",
+          question: "Which of the following router manufacturers do we typically recommend that customers avoid due to reliability concerns?",
+          choices: ["TP-Link", "Netgear", "ASUS", "Ubiquiti"],
+          correctIndex: 1
+        },
+        {
+          section: "Routers & ISP Equipment",
+          question: "What are the key advantages of using an ISP-managed router?",
+          choices: [
+            "The ISP can remotely access and diagnose issues on the network, and can replace or upgrade hardware as needed",
+            "The router never needs maintenance and guarantees perfect Wi-Fi coverage in every part of the home",
+            "The customer gains full control over all backend systems and no longer needs technical support",
+            "The router eliminates the need for an ONT and improves fiber speeds automatically"
+          ],
+          correctIndex: 0
+        },
+        {
+          section: "Programs & Policies",
+          question: "When a customer utilizes the LightGig referral program to refer a new customer, what happens when that new customer signs up and mentions the referrer?",
+          choices: [
+            "Only the new customer receives a discount on their first bill",
+            "The referring customer receives a one-time credit, but the new customer receives nothing",
+            "Both the referring customer and the new customer receive a free month of service",
+            "The referring customer receives a reward only after multiple successful referrals"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Programs & Policies",
+          question: "What is unique about LightGig’s referral program?",
+          choices: [
+            "It is limited to one referral per year",
+            "It requires a long-term contract commitment",
+            "It allows unlimited referrals and rewards",
+            "It only applies to business accounts"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Programs & Policies",
+          question: "What is the length of the router trial period offered to customers?",
+          choices: ["7 days", "14 days", "21 days", "30 days"],
+          correctIndex: 2
+        },
+        {
+          section: "Programs & Policies",
+          question: "What happens if a customer does not return the router after the trial period has ended?",
+          choices: [
+            "Nothing happens, and the customer keeps the router at no cost",
+            "The customer’s internet service is immediately canceled",
+            "A monthly router rental fee is automatically added to the customer’s bill",
+            "The router is remotely disabled by the ISP"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Fiber Testing & Tools",
+          question: "What is the primary purpose of using a light loss tester during a fiber installation or troubleshooting?",
+          choices: [
+            "To measure Wi-Fi signal strength throughout the home",
+            "To test electrical current running through Ethernet cables",
+            "To measure the strength of the optical signal in the fiber line",
+            "To verify that the router is properly configured"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Fiber Testing & Tools",
+          question: "Which wavelength range is typically used when testing GPON fiber signals?",
+          choices: ["850 nm", "Approximately 1270–1310 nm", "1550 nm", "2000 nm"],
+          correctIndex: 1
+        },
+        {
+          section: "Fiber Testing & Tools",
+          question: "Which wavelength is typically used when testing XGS-PON fiber signals?",
+          choices: ["850 nm", "1310 nm", "1577 nm", "2000 nm"],
+          correctIndex: 2
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "Approximately how much bandwidth does a typical HD or 4K streaming device use during normal operation?",
+          choices: ["5 Mbps", "10 Mbps", "Around 25 Mbps", "100 Mbps"],
+          correctIndex: 2
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "What typically happens when a wireless device has a weak signal connection to the router?",
+          choices: [
+            "The device automatically boosts its signal strength",
+            "The device begins requesting retransmission of data packets",
+            "The router increases its power output to compensate",
+            "The connection becomes faster due to reduced interference"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "Why can a device with a weak Wi-Fi signal negatively impact the performance of the entire network?",
+          choices: [
+            "It reduces the router’s total bandwidth capacity",
+            "It forces other devices to disconnect from the network",
+            "It causes repeated retransmissions, increasing overall network congestion",
+            "It changes the network’s frequency band automatically"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "What is a key characteristic of traditional Wi-Fi extenders?",
+          choices: [
+            "They create a single seamless network identical to the main router",
+            "They create a separate network (SSID) that devices must connect to",
+            "They require a direct fiber connection to operate",
+            "They replace the need for a router entirely"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "What is a common downside of using traditional Wi-Fi extenders in a home network?",
+          choices: [
+            "They provide too much coverage, causing interference",
+            "Because they broadcast a separate SSID, they can create signal interference and require manual switching between networks",
+            "They reduce the number of devices that can connect",
+            "They eliminate dead zones completely"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "How do mesh Wi-Fi systems differ from traditional extenders in a home network?",
+          choices: [
+            "They create multiple separate networks for each device",
+            "They require all connections to be wired",
+            "They create a unified network that allows devices to move seamlessly between access points",
+            "They reduce overall network coverage"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Wi-Fi Behavior & Performance",
+          question: "What is a major benefit of using a mesh Wi-Fi system in a home network?",
+          choices: [
+            "It allows devices to automatically connect to the strongest available signal as they move through the home",
+            "It increases the speed of the fiber signal coming into the home",
+            "It removes the need for a router and ONT",
+            "It guarantees that every device will always receive maximum speeds regardless of distance or obstruction"
+          ],
+          correctIndex: 0
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "What are the two most common categories of issues when troubleshooting internet problems?",
+          choices: [
+            "Billing issues and account errors",
+            "Software bugs and firmware problems",
+            "Layer 1 (physical) issues and Wi-Fi issues",
+            "Fiber outages and power failures"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "In the ISP context, what does \"Layer 1\" refer to?",
+          choices: [
+            "Software configurations and network settings",
+            "The physical components such as cables, ports, and connections",
+            "Customer billing systems",
+            "Wireless signal optimization"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "When troubleshooting, why is it important to first distinguish between a Layer 1 issue and a Wi-Fi issue?",
+          choices: [
+            "Because both issues require the exact same solution",
+            "Because identifying the category helps determine the correct troubleshooting path",
+            "Because Wi-Fi issues are always more serious",
+            "Because Layer 1 issues cannot be fixed"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "A customer reports intermittent internet drops on a wired connection. What is the most likely category of issue?",
+          choices: [
+            "Wi-Fi interference",
+            "Layer 1 (physical connection issue)",
+            "Billing problem",
+            "Mesh configuration"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "A customer has strong wired speeds but experiences poor performance in a specific room over Wi-Fi. What is the most likely cause of this issue?",
+          choices: [
+            "A Layer 1 cabling issue affecting the entire home",
+            "A fiber signal problem coming from the OLT",
+            "A Wi-Fi coverage or interference issue in that area",
+            "A failure of the ONT hardware"
+          ],
+          correctIndex: 2
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "A customer reports that wired connections are stable, but wireless devices frequently disconnect or buffer. What does this most likely indicate?",
+          choices: [
+            "A Layer 1 issue affecting all connections",
+            "A Wi-Fi-related issue such as interference or weak signal",
+            "A billing or account-related issue",
+            "A failure at the OLT"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "All devices in the home—both wired and wireless—are experiencing slow speeds. What is the most likely category of issue?",
+          choices: [
+            "A Wi-Fi-only issue",
+            "A Layer 1 issue or upstream network issue",
+            "A mesh node placement issue",
+            "A single device malfunction"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "A connection drops when an Ethernet cable is physically moved or adjusted. What does this most strongly indicate?",
+          choices: [
+            "A Wi-Fi interference issue",
+            "A Layer 1 issue such as a bad cable or poor termination",
+            "A router firmware problem",
+            "A fiber signal issue"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "Only one device in the home is experiencing poor connectivity, while all other devices are working normally. What is the most likely cause?",
+          choices: [
+            "A Layer 1 issue affecting the entire network",
+            "A device-specific issue or localized Wi-Fi problem",
+            "A failure at the OLT",
+            "A widespread ISP outage"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "A customer experiences slower speeds primarily during high usage times, especially on wireless devices. What is the most likely cause of this issue?",
+          choices: [
+            "A fiber cut outside the home",
+            "Wi-Fi congestion or interference within the home",
+            "A failure of the OLT",
+            "A malfunctioning power injector"
+          ],
+          correctIndex: 1
+        },
+        {
+          section: "Troubleshooting & Tech Visit Scenarios",
+          question: "When performing troubleshooting, what is the primary goal of the technician?",
+          choices: [
+            "Replace all equipment immediately to rule out issues",
+            "Guess the issue based on experience",
+            "Identify the root cause (such as Layer 1 vs Wi-Fi) and address it appropriately",
+            "Reset the network without diagnosis"
+          ],
+          correctIndex: 2
         }
       ]
     };
@@ -380,7 +886,7 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
+        .replace(/\"/g, '&quot;')
         .replace(/'/g, '&#39;');
     }
 
@@ -457,6 +963,7 @@
       updateProgress();
 
       screen.innerHTML = `
+        ${q.section ? `<div class="section-label">${escapeHtml(q.section)}</div>` : ''}
         <h2 class="question-text">${escapeHtml(q.question)}</h2>
         <div class="answers">
           ${q.choices.map((choice, index) => `
@@ -499,6 +1006,7 @@
 
         return {
           questionNumber: index + 1,
+          section: q.section || '',
           question: q.question,
           selectedAnswer: selectedText,
           correctAnswer: correctText,
@@ -557,7 +1065,7 @@
         <div class="review-list">
           ${results.detailedResults.map(item => `
             <div class="review-item ${item.isCorrect ? 'correct' : 'incorrect'}">
-              <h4>Question ${item.questionNumber}: ${escapeHtml(item.question)}</h4>
+              <h4>${item.section ? `${escapeHtml(item.section)} — ` : ''}Question ${item.questionNumber}: ${escapeHtml(item.question)}</h4>
               <p><strong>Your Answer:</strong> ${escapeHtml(item.selectedAnswer)}</p>
               <p><strong>Correct Answer:</strong> ${escapeHtml(item.correctAnswer)}</p>
               <p class="muted"><strong>Status:</strong> ${item.isCorrect ? 'Correct' : 'Incorrect'}</p>
@@ -612,6 +1120,7 @@
       lines.push('----------------------------------------');
 
       results.detailedResults.forEach((item) => {
+        if (item.section) lines.push(`Section: ${item.section}`);
         lines.push(`Question ${item.questionNumber}: ${item.question}`);
         lines.push(`Your Answer: ${item.selectedAnswer}`);
         lines.push(`Correct Answer: ${item.correctAnswer}`);
@@ -639,6 +1148,7 @@
         'Percent',
         'Passing Percent',
         'Passed',
+        'Section',
         'Question Number',
         'Question',
         'Selected Answer',
@@ -656,6 +1166,7 @@
           `${results.percent}%`,
           `${results.passingPercent}%`,
           results.passed ? 'Yes' : 'No',
+          item.section,
           item.questionNumber,
           item.question,
           item.selectedAnswer,
@@ -684,3 +1195,4 @@
   </script>
 </body>
 </html>
+
