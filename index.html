@@ -366,7 +366,7 @@
         },
         {
           section: "Ethernet, Cabling & Layer 1 Fundamentals",
-          question: "What is the primary purpose of performing a \"wiggle test\" on a keystone or termination point?",
+          question: "What is the primary purpose of performing a “wiggle test” on a keystone or termination point?",
           choices: [
             "To verify Wi-Fi signal strength near the wall plate",
             "To test whether the ONT is receiving proper optical signal",
@@ -377,7 +377,7 @@
         },
         {
           section: "Ethernet, Cabling & Layer 1 Fundamentals",
-          question: "In networking, what is meant by \"speed negotiation\" between two devices?",
+          question: "In networking, what is meant by “speed negotiation” between two devices?",
           choices: [
             "A manual configuration where a technician selects a fixed speed",
             "A process where devices agree on the highest stable speed they can both support",
@@ -399,7 +399,7 @@
         },
         {
           section: "Ethernet, Cabling & Layer 1 Fundamentals",
-          question: "In a residential installation, what is typically referred to as the \"home run\"?",
+          question: "In a residential installation, what is typically referred to as the “home run”?",
           choices: [
             "The wireless signal broadcast from the router",
             "The fiber line running from the street to the home",
@@ -410,7 +410,7 @@
         },
         {
           section: "Ethernet, Cabling & Layer 1 Fundamentals",
-          question: "What is meant by a \"horizontal run\" in a home network installation?",
+          question: "What is meant by a “horizontal run” in a home network installation?",
           choices: [
             "The fiber line entering the home from the street",
             "The internal Ethernet cabling that runs within the home to connect devices or wall ports",
@@ -499,19 +499,34 @@
         {
           section: "Equipment & Hardware Knowledge",
           question: "What is the maximum bandwidth capability of a Nano ONT?",
-          choices: ["100 Mbps", "1 Gbps", "2.5 Gbps", "10 Gbps"],
+          choices: [
+            "100 Mbps down / 100 Mbps up",
+            "1 Gbps down / 1 Gbps up",
+            "2.5 Gbps down / 2.5 Gbps up",
+            "10 Gbps down / 10 Gbps up"
+          ],
           correctIndex: 1
         },
         {
           section: "Equipment & Hardware Knowledge",
           question: "What is the maximum bandwidth capability of a Fiber XG ONT?",
-          choices: ["1 Gbps", "2.5 Gbps", "5 Gbps", "10 Gbps"],
+          choices: [
+            "1 Gbps down / 100 Mbps up",
+            "2.5 Gbps down / 1 Gbps up",
+            "10 Gbps down / 2.5 Gbps up",
+            "10 Gbps down / 10 Gbps up"
+          ],
           correctIndex: 2
         },
         {
           section: "Equipment & Hardware Knowledge",
           question: "What is the maximum bandwidth capability of an XGS ONT?",
-          choices: ["1 Gbps", "2.5 Gbps", "5 Gbps", "10 Gbps"],
+          choices: [
+            "1 Gbps down / 1 Gbps up",
+            "2.5 Gbps down / 2.5 Gbps up",
+            "5 Gbps down / 5 Gbps up",
+            "10 Gbps down / 10 Gbps up"
+          ],
           correctIndex: 3
         },
         {
@@ -538,7 +553,7 @@
         },
         {
           section: "Service Model: Scope, Service Area & LightGig Differentiators",
-          question: "What does LightGig mean by its \"scope of service\" during an installation?",
+          question: "What does LightGig mean by its “scope of service” during an installation?",
           choices: [
             "Providing full in-home networking and device setup",
             "Delivering internet service reliably to a single point in the home",
@@ -560,7 +575,7 @@
         },
         {
           section: "Service Model: Scope, Service Area & LightGig Differentiators",
-          question: "What is meant by \"no oversubscription\" in a network context?",
+          question: "What is meant by “no oversubscription” in a network context?",
           choices: [
             "Selling more bandwidth than the network can handle",
             "Limiting the number of customers below demand",
@@ -630,7 +645,7 @@
           section: "Programs & Policies",
           question: "What is the length of the router trial period offered to customers?",
           choices: ["7 days", "14 days", "21 days", "30 days"],
-          correctIndex: 2
+          correctIndex: 1
         },
         {
           section: "Programs & Policies",
@@ -751,7 +766,7 @@
         },
         {
           section: "Troubleshooting & Tech Visit Scenarios",
-          question: "In the ISP context, what does \"Layer 1\" refer to?",
+          question: "In the ISP context, what does “Layer 1” refer to?",
           choices: [
             "Software configurations and network settings",
             "The physical components such as cables, ports, and connections",
@@ -886,7 +901,7 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/\"/g, '&quot;')
+        .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
     }
 
@@ -1195,4 +1210,3 @@
   </script>
 </body>
 </html>
-
